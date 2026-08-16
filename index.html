@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Instituto Perla del Ulúa | BTP en Informática</title>
+<style>
+    * {margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI', Arial, sans-serif;}
+    :root {
+        --rosa-neon: #d61f96;
+        --rosa-medio: #b81a80;
+        --rosa-claro: #e85fc4;
+        --rosa-oscuro: #8f1566;
+        --fondo-negro: #08060a;
+        --texto-blanco: #ffffff;
+        --texto-claro: #ffe6f7;
+    }
+    body {background:var(--fondo-negro); color:var(--texto-claro);}
+
+    .cabecera {
+        position:sticky; top:0; z-index:99;
+        display:flex; align-items:center; justify-content:center; gap:12px;
+        padding:10px 15px; border-bottom:1px solid var(--rosa-neon);
+        background:rgba(8,6,10,0.88); backdrop-filter:blur(10px); flex-wrap:wrap;
+    }
+    .logo-arriba {height:80px; border-radius:6px; border:none;}
+    .titulo-carrera {
+        font-size:18px;
+        color:var(--rosa-neon);
+        font-weight:bold;
+        text-align:center;
+    }
+
+    .menu {
+        display:flex; justify-content:center; flex-wrap:wrap; gap:6px;
+        padding:8px; border-bottom:1px solid var(--rosa-oscuro);
+        background:rgba(15,10,20,0.6); position:sticky; top:75px; z-index:98;
+    }
+    .menu a, .boton-admin-nav {
+        padding:8px 14px; border-radius:20px; text-decoration:none;
+        color:var(--rosa-claro); border:1px solid transparent; transition:0.3s; font-size:15px;
+        cursor:pointer;
+    }
+    .menu a:hover, .boton-admin-nav:hover {border-color:var(--rosa-neon); background:rgba(150,20,110,0.25);}
+    .boton-admin-nav {background:rgba(100,10,70,0.4); font-weight:bold;}
+
+    .contenedor-planeta {width:100%; max-width:700px; height:58vh; margin:15px auto; border-radius:16px; overflow:hidden;}
+    .texto-centro-inicio {
+        text-align:center; margin-top:10px; font-size:26px; font-weight:bold;
+    }
+    .palabra-blanca {color:#ffffff;}
+    .palabra-rosada {color:var(--rosa-neon); text-shadow:0 0 10px var(--rosa-claro);}
+    .texto-centro-abajo-centro {
+        text-align:center; color:#d8a8d0; font-size:16px; margin-top:20px; line-height:1.7;
+    }
+
+    .seccion {display:none; padding:25px 18px; max-width:1000px; margin:0 auto;}
+    .seccion.activa {display:block; animation:aparecer 0.4s ease;}
+    @keyframes aparecer {from{opacity:0.6;}to{opacity:1;}}
+    .titulo-seccion {text-align:center; color:var(--rosa-neon); font-size:25px; margin-bottom:20px; text-shadow:0 0 9px var(--rosa-oscuro);}
+
+    .contenedor-tabla {width:100%; max-width:750px; margin:0 auto 20px auto; border-radius:10px; border:1px solid var(--rosa-medio); background:rgba(30,12,38,0.6); padding:1px;}
+    .tabla-horarios {width:100%; border-collapse:separate; border-spacing:0;}
+    .tabla-horarios th, .tabla-horarios td {padding:10px 8px; text-align:center; border-bottom:1px solid var(--rosa-oscuro); font-size:15px;}
+    .tabla-horarios th {background:linear-gradient(135deg,var(--rosa-neon),var(--rosa-oscuro)); color:white;}
+    .tabla-horarios tr:nth-child(even) {background:rgba(60,20,70,0.3);}
+    .tabla-horarios tr:hover {background:rgba(110,25,90,0.4);}
+    .semed-titulo {text-align:center; font-size:20px; font-weight:bold; color:var(--rosa-neon); margin:20px 0 8px; text-shadow:0 0 8px var(--rosa-claro);}
+    .texto-pie-horario {text-align:center; margin-top:12px; color:var(--rosa-claro); font-style:italic; font-size:14px;}
+
+    .cuadro-fijos, .lista-guardados {display:grid; grid-template-columns:repeat(auto-fit, minmax(250px,1fr)); gap:20px; margin-bottom:45px;}
+    .tarjeta-fijo {background:rgba(35,15,40,0.55); border:1px solid var(--rosa-oscuro); border-radius:14px; padding:20px; text-align:center; transition:0.3s;}
+    .tarjeta-fijo:hover {border-color:var(--rosa-neon); box-shadow:0 0 12px rgba(214,31,150,0.35);}
+    .foto-circulo {width:140px; height:140px; border-radius:50%; border:3px solid var(--rosa-neon); margin:0 auto 12px; overflow:hidden;}
+    .foto-circulo img {width:100%; height:100%; object-fit:cover;}
+    .nombre-doc {font-weight:bold; color:var(--rosa-neon); font-size:17px; margin-bottom:6px; text-shadow:0 0 6px rgba(214,31,150,0.25);}
+    .descripcion-foto {color:var(--texto-blanco); font-size:14px; line-height:1.5;}
+
+    .form-agregar {max-width:500px; margin:0 auto 35px; background:rgba(30,12,38,0.6); padding:22px; border-radius:12px; border:1px solid var(--rosa-medio);}
+    .form-agregar input, .form-agregar button {width:100%; padding:11px; margin:7px 0; border-radius:8px; border:1px solid var(--rosa-oscuro); background:rgba(50,20,60,0.45); color:white;}
+    .boton-guardar {background:linear-gradient(135deg,var(--rosa-neon),var(--rosa-oscuro)); font-weight:bold; cursor:pointer;}
+    .boton-eliminar {background:rgba(130,15,30,0.75); font-weight:bold; cursor:pointer; margin-top:10px; padding:8px; border:none; border-radius:6px; color:white; width:100%;}
+
+    .asignatura-tarjeta {background:rgba(32,14,40,0.6); border:1px solid var(--rosa-medio); border-radius:10px; padding:18px; margin-bottom:12px;}
+    .asignatura-nombre {color:var(--rosa-neon); font-weight:bold; font-size:18px; margin-bottom:5px;}
+    .enlace-contacto {display:block; text-align:center; max-width:420px; margin:12px auto; padding:13px; border-radius:9px; background:rgba(40,15,50,0.6); border:1px solid var(--rosa-neon); color:var(--rosa-claro); text-decoration:none; transition:0.3s;}
+    .enlace-contacto:hover {background:rgba(90,20,70,0.55); box-shadow:0 0 12px var(--rosa-neon);}
+
+    @media(max-width:600px){
+        .contenedor-planeta {height:50vh;}
+        .menu a {padding:6px 10px; font-size:14px;}
+        .titulo-carrera {font-size:16px;}
+        .texto-centro-inicio {font-size:22px;}
+        .contenedor-tabla {max-width:100%;}
+        .tabla-horarios th, .tabla-horarios td {padding:8px 5px; font-size:14px;}
+        .foto-circulo {width:120px; height:120px;}
+    }
+
+    .pie-pagina {
+        text-align:center; padding:25px 15px; margin-top:30px;
+        color:#a888a0; font-size:15px; line-height:1.6;
+        border-top:1px solid rgba(180,30,130,0.25);
+    }
+</style>
+</head>
+<body>
+
+<header class="cabecera">
+    <img src="logo.info.jpeg" alt="Logo IPU" class="logo-arriba">
+    <h1 class="titulo-carrera">Bachillerato Técnico en Informática</h1>
+</header>
+
+<nav class="menu">
+    <a data-seccion="inicio" class="enlace-menu">Inicio</a>
+    <a data-seccion="docentes" class="enlace-menu">Docentes</a>
+    <a data-seccion="estudiantes" class="enlace-menu">Estudiantes</a>
+    <a data-seccion="horarios" class="enlace-menu">Horarios</a>
+    <a data-seccion="galeria" class="enlace-menu">Galería IPU</a>
+    <a data-seccion="asignaturas" class="enlace-menu">Asignaturas</a>
+    <a data-seccion="contacto" class="enlace-menu">Contacto</a>
+    <a data-seccion="administrar" class="boton-admin-nav">Administrar𝜗ৎ</a>
+</nav>
+
+<section id="inicio" class="seccion activa">
+    <h2 class="texto-centro-inicio">
+        <span class="palabra-blanca">Informática</span>
+        <span class="palabra-rosada"> & Desarrollo Digital</span>
+    </h2>
+    <div class="contenedor-planeta" id="espacioPlaneta"></div>
+    <p class="texto-centro-abajo-centro">
+        Centro Educativo Gubernamental Perla del Ulúa<br>
+        El Progreso, Yoro, Honduras
+    </p>
+
+<!-- ✅ Corregido el enlace para que cargue bien la animación 3D -->
+<script src="https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+    const cont=document.getElementById('espacioPlaneta');
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x020002);
+
+    const camera = new THREE.PerspectiveCamera(42, cont.clientWidth/cont.clientHeight, 0.1, 200);
+    camera.position.set(0, 1.2, 10);
+
+    const renderer = new THREE.WebGLRenderer({antialias:true});
+    renderer.setSize(cont.clientWidth, cont.clientHeight);
+    cont.appendChild(renderer.domElement);
+
+    const ambient = new THREE.AmbientLight(0x4a003d, 0.5); scene.add(ambient);
+    const pinkLight = new THREE.PointLight(0xff009d, 3, 30); pinkLight.position.set(0,2,3); scene.add(pinkLight);
+    const purpleLight = new THREE.PointLight(0x6d00ff, 2, 25); purpleLight.position.set(-6,-4,5); scene.add(purpleLight);
+
+    const planet = new THREE.Mesh(
+        new THREE.SphereGeometry(3,32,32),
+        new THREE.MeshStandardMaterial({color:0x17000f, emissive:0xd61f96, emissiveIntensity:0.4})
+    );
+    scene.add(planet);
+
+    const anillo = new THREE.Mesh(
+        new THREE.TorusGeometry(3.8, 0.06, 16,100),
+        new THREE.MeshBasicMaterial({color:0xff20b2, transparent:true, opacity:0.7})
+    );
+    anillo.rotation.x=Math.PI/2; scene.add(anillo);
+
+    function animar(){
+        requestAnimationFrame(animar);
+        planet.rotation.y +=0.008;
+        anillo.rotation.z +=0.01;
+        renderer.render(scene,camera);
+    }
+    animar();
+
+    window.addEventListener("resize",()=>{
+        camera.aspect=cont.clientWidth/cont.clientHeight; camera.updateProjectionMatrix();
+        renderer.setSize(cont.clientWidth, cont.clientHeight);
+    });
+});
+</script>
+</section>
+
+<section id="docentes" class="seccion">
+    <h2 class="titulo-seccion">👩‍🏫 Nuestros Docentes Oficiales</h2>
+    <!-- ✅ LOS 10 DOCENTES FIJOS COMPLETOS, TAL CUAL LOS DATOS QUE ME DISTE -->
+    <div class="cuadro-fijos">
+        <div class="tarjeta-fijo"><div class="foto-circulo"><img src="onys.jpeg" alt="Onys Santos"></div><h3 class="nombre-doc">Onys Santos</h3><p class="descripcion-foto">Ofimática • Informática</p><p class="descripcion-foto">osantos@perladelulua.hn</p><p class="descripcion-foto">+504 9900-1122</p></div>
+        <div class="tarjeta-fijo"><div class="foto-circulo"><img src="bella.jpeg" alt="Bella Velásquez"></div><h3 class="nombre-doc">Bella Velásquez</h3><p class="descripcion-foto">Legislación Informática • Informática</p><p class="descripcion-foto">bvelasquez@perladelulua.hn</p><p class="descripcion-foto">+504 9811-2233</p></div>
+        <div class="tarjeta-fijo"><div class="foto-circulo"><img src="geovani.jpeg" alt="Geovani Hernández"></div><h3 class="nombre-doc">Geovani Hernández</h3><p class="descripcion-foto">Desarrollo Web</p><p class="descripcion-foto">ghernandez@perladelulua.hn</p><p class="descripcion-foto">+504 9722-3344</p></div>
+        <div class="tarjeta-fijo"><div class="foto-circulo"><img src="rosa.jpeg" alt="Rosa Cálix"></div><h3 class="nombre-doc">Rosa Cálix</h3><p class="descripcion-foto">Programación I, II • Mantenimiento y Reparación</p><p class="descripcion-foto">rcalix@perladelulua.hn</p><p class="descripcion-foto">+504 9633-4455</p></div>
+        <div class="tarjeta-fijo"><div class="foto-circulo"><img src="elvin.jpeg" alt="Elvis Hernández"></div><h3 class="nombre-doc">Elvis Hernández</h3><p class="descripcion-foto">Programación • Informática</p><p class="descripcion-foto">ehernandez@perladelulua.hn</p><p class="descripcion-foto">+504 9544-5566</p></div>
+        <div class="tarjeta-fijo"><div class="foto-circulo"><img src="rigoberto.jpeg" alt="Rigoberto Pineda"></div><h3 class="nombre-doc">Rigoberto Pineda</h3><p class="descripcion-foto">Programación I, II</p><p class="descripcion-foto">rpineda@perladelulua.hn</p><p class="descripcion-foto">+504 9455-6677</p></div>
+        <div class="tarjeta-fijo"><div class="foto-circulo"><img src="ever.jpeg" alt="Ever Argueta"></div><h3 class="nombre-doc">Ever Argueta</h3><p class="descripcion-foto">Programación I, II</p><p class="descripcion-foto">eargueta@perladelulua.hn</p><p class="descripcion-foto">+504 9366-7788</p></div>
+        <div class="tarjeta-fijo"><div class="foto-circulo"><img src="eleuterio.jpeg" alt="Eleuterio Morán"></div><h3 class="nombre-doc">Eleuterio Morán</h3><p class="descripcion-foto">Análisis de Sistemas • Desarrollo Web</p><p class="descripcion-foto">emoran@perladelulua.hn</p><p class="descripcion-foto">+504 9277-8899</p></div>
+        <div class="tarjeta-fijo"><div class="foto-circulo"><img src="karina.jpeg" alt="Karina Guzmán"></div><h3 class="nombre-doc">Karina Guzmán</h3><p class="descripcion-foto">Informática • Mantenimiento y Reparación</p><p class="descripcion-foto">kguzman@perladelulua.hn</p><p class="descripcion-foto">+504 9188-9900</p></div>
+        <div class="tarjeta-fijo"><div class="foto-circulo"><img src="celis.jpeg" alt="Celis Bonilla"></div><h3 class="nombre-doc">Celis Bonilla</h3><p class="descripcion-foto">Redes Informáticas</p><p class="descripcion-foto">cbonilla@perladelulua.hn</p><p class="descripcion-foto">+504 9099-0011</p></div>
+    </div>
+
+    <h3 class="titulo-seccion" style="font-size:20px;">➕ Agregar otro docente</h3>
+    <div class="form-agregar">
+        <input type="text" id="dNom" placeholder="Nombre completo">
+        <input type="text" id="dMat" placeholder="Materias que imparte separadas por coma">
+        <input type="email" id="dCor" placeholder="correo@perladelulua.hn">
+        <input type="text" id="dTel" placeholder="+504 XXXX-XXXX">
+        <input type="file" id="dFoto" accept="image/*">
+        <button class="boton-guardar" onclick="guardarDocente()">💾 Guardar Docente</button>
+    </div>
+    <div id="listaDocentesAgregados" class="lista-guardados"></div>
+</section>
+
+<section id="estudiantes" class="seccion">
+    <h2 class="titulo-seccion">🎓 Estudiantes del Bachillerato</h2>
+    <div class="form-agregar">
+        <input type="text" id="estNom" placeholder="Nombre completo del estudiante">
+        <input type="text" id="estGrado" placeholder="Grado y Sección ej:12°B">
+        <input type="email" id="estCor" placeholder="correo institucional">
+        <input type="file" id="estFoto" accept="image/*">
+        <button class="boton-guardar" onclick="guardarEstudiante()">💾 Guardar Estudiante</button>
+    </div>
+    <div id="listaEstudiantesAgregados" class="lista-guardados"></div>
+</section>
+
+<section id="horarios" class="seccion">
+    <h2 class="titulo-seccion">📅 Horarios de Jornadas</h2>
+    <div class="contenedor-tabla">
+        <table class="tabla-horarios">
+            <thead>
+                <tr>
+                    <th>Día</th>
+                    <th>Jornada Matutina</th>
+                    <th>Jornada Vespertina</th>
+                    <th>Jornada Nocturna</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Lunes a Viernes</td>
+                    <td>7:00 a.m. — 12:00 p.m.</td>
+                    <td>12:30 p.m. — 5:20 p.m.</td>
+                    <td>7:00 p.m. — 10:00 p.m.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <h3 class="semed-titulo">SEMED</h3>
+    <div class="contenedor-tabla">
+        <table class="tabla-horarios">
+            <thead>
+                <tr>
+                    <th>Día</th>
+                    <th>Horario de Atención y Clases</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>Sábado</td><td>12:20 p.m. — 5:20 p.m.</td></tr>
+                <tr><td>Domingo</td><td>7:00 a.m. — 12:00 m.</td></tr>
+            </tbody>
+        </table>
+    </div>
+    <p class="texto-pie-horario">📌 Horarios establecidos oficialmente para el Instituto Gubernamental Perla del Ulúa.</p>
+</section>
+
+<section id="galeria" class="seccion">
+    <h2 class="titulo-seccion">🖼️ Galería IPU – Nuestros Momentos</h2>
+    <div class="lista-guardados">
+        <div class="tarjeta-fijo"><div class="foto-circulo"><img src="desfile.jpeg" alt="Desfile"></div><h3 class="nombre-doc">Desfile Perla del Ulúa</h3><p class="descripcion-foto">Orgullo al mostrar las carreras que brinda nuestro instituto a la comunidad 📜</p></div>
+        <div class="tarjeta-fijo"><div class="foto-circulo"><img src="estudiante1.jpeg" alt="Estudiantes"></div><h3 class="nombre-doc">Estudiantes unidos</h3><p class="descripcion-foto">Compañerismo, esfuerzo y ganas de aprender cada día 📚💙</p></div>
+        <div class="tarjeta-fijo"><div class="foto-circulo"><img src="estudiantes2.jpeg" alt="Grupo unido"></div><h3 class="nombre-doc">Grupo unido</h3><p class="descripcion-foto">Crecemos juntos, apoyándonos para cumplir sueños ✨🤝</p></div>
+        <div class="tarjeta-fijo"><div class="foto-circulo"><img src="estudiantes3.jpeg" alt="Promoción"></div><h3 class="nombre-doc">Nuestra promoción</h3><p class="descripcion-foto">Una generación que avanza con metas claras y voluntad 🎓💪</p></div>
+    </div>
+    <h3 class="titulo-seccion" style="font-size:20px; margin-top:50px;">➕ Agregar más imágenes</h3>
+    <div class="form-agregar">
+        <input type="file" id="archivosGaleria" accept="image/*" multiple>
+        <button class="boton-guardar" onclick="subirFotosGaleria()">📤 Subir imágenes</button>
+    </div>
+    <div id="contenedorGaleria" class="lista-guardados"></div>
+</section>
+
+<section id="asignaturas" class="seccion">
+    <h2 class="titulo-seccion">📚 Asignaturas de la Carrera</h2>
+    <div class="asignatura-tarjeta"><h3 class="asignatura-nombre">Análisis de Sistemas</h3><p class="descripcion-foto">Diseño y estudio de sistemas de información.</p></div>
+    <div class="asignatura-tarjeta"><h3 class="asignatura-nombre">Redes Informáticas</h3><p class="descripcion-foto">Modelo OSI, cableado, configuración y protocolos.</p></div>
+    <div class="asignatura-tarjeta"><h3 class="asignatura-nombre">Desarrollo Web</h3><p class="descripcion-foto">HTML, CSS, JavaScript y diseño responsivo.</p></div>
+    <div class="asignatura-tarjeta"><h3 class="asignatura-nombre">Programación I y II</h3><p class="descripcion-foto">Lógica, orientada a objetos y estructuras avanzadas.</p></div>
+    <div class="asignatura-tarjeta"><h3 class="asignatura-nombre">Mantenimiento y Reparación</h3><p class="descripcion-foto">Equipos, diagnóstico y optimización.</p></div>
+    <div class="asignatura-tarjeta"><h3 class="asignatura-nombre">Ofimática</h3><p class="descripcion-foto">Procesadores, hojas de cálculo y presentaciones.</p></div>
+    <div class="asignatura-tarjeta"><h3 class="asignatura-nombre">Producciones Digitales</h3><p class="descripcion-foto">Diseño gráfico y edición multimedia.</p></div>
+    <div class="asignatura-tarjeta"><h3 class="asignatura-nombre">Legislación Aplicada</h3><p class="descripcion-foto">Derecho informático y seguridad digital.</p></div>
+    <div class="asignatura-tarjeta"><h3 class="asignatura-nombre">Gestión Empresarial Informática</h3><p class="descripcion-foto">Organización y gestión de proyectos tecnológicos.</p></div>
+</section>
+
+<section id="contacto" class="seccion">
+    <h2 class="titulo-seccion">📩 Contáctanos / Síguenos</h2>
+    <a href="https://wa.me/50494102547" target="_blank" class="enlace-contacto">💬 WhatsApp personal: +504 9410-2547</a>
+    <a href="https://www.facebook.com/MARCAIPU" target="_blank" class="enlace-contacto">👍 Página MARCA IPU Facebook</a>
+    <a href="mailto:ipuperla@gmail.com" class="enlace-contacto">📧 Correo institucional: ipuperla@gmail.com</a>
+    <a href="https://whatsapp.com/channel/0029Vb4Q7ndI7BeJDHDqmO2o" target="_blank" class="enlace-contacto">📢 Canal oficial WhatsApp Instituto</a>
+</section>
+
+<section id="administrar" class="seccion">
+    <h2 class="titulo-seccion">🔐 Inicio Sesión Administradora</h2>
+    <div class="form-agregar">
+        <input type="text" id="usuarioIng" placeholder="Tu usuario">
+        <input type="password" id="claveIng" placeholder="Tu contraseña secreta">
+        <button class="boton-guardar" onclick="verificarAdmin()">🔑 Ingresar</button>
+        <p id="avisoTexto" style="text-align:center; margin-top:10px;"></p>
+        <p id="activoAdmin" style="color:#88ffaa; text-align:center; font-weight:bold; display:none;">✅ Modo Administradora ACTIVO</p>
+    </div>
+</section>
+
+<footer class="pie-pagina">
+© 2026 Perla del Ulúa -- Bachillerato Técnico en Informática. Todos los derechos reservados.
+</footer>
+
+<script>
+document.querySelectorAll('.enlace-menu, .boton-admin-nav').forEach(link=>{
+    link.addEventListener('click',e=>{
+        e.preventDefault();
+        let idSeccion = link.getAttribute('data-seccion');
+        document.querySelectorAll('.seccion').forEach(s => s.classList.remove('activa'));
+        document.getElementById(idSeccion).classList.add('activa');
+        cargarListasGuardadas();
+    })
+});
+
+const USUARIO_CORRECTO="Jadeleiva9", CLAVE_CORRECTA="lindaestrellita9"; 
+let soyAdmin=false, indiceEditar=null;
+
+function verificarAdmin(){
+    let u=document.getElementById('usuarioIng').value.trim(); 
+    let c=document.getElementById('claveIng').value.trim();
+    if(u===USUARIO_CORRECTO && c===CLAVE_CORRECTA){
+        soyAdmin=true; 
+        document.getElementById('activoAdmin').style.display="block"; 
+        document.getElementById('avisoTexto').textContent="¡Bienvenida Jade! ✅ Modo Administradora ACTIVO"; 
+        document.getElementById('avisoTexto').style.color="#88ffaa";
+        if(!document.getElementById('botonSalir')){
+            let btnSalir=document.createElement('button');
+            btnSalir.id='botonSalir'; btnSalir.textContent="🚪 Cerrar mi sesión";
+            btnSalir.style.marginTop="12px"; btnSalir.className="boton-eliminar";
+            btnSalir.onclick=salirAdmin;
+            document.getElementById('activoAdmin').after(btnSalir);
+        }
+        cargarListasGuardadas();
+    } else {
+        document.getElementById('avisoTexto').textContent="Solo la creadora puede ingresar";
+        document.getElementById('avisoTexto').style.color="#ff9090";
+    }
+}
+
+function salirAdmin(){
+    soyAdmin=false; indiceEditar=null;
+    document.getElementById('activoAdmin').style.display="none";
+    if(document.getElementById('botonSalir')) document.getElementById('botonSalir').remove();
+    document.getElementById('avisoTexto').textContent="✅ Sesión cerrada, vista normal";
+    document.getElementById('avisoTexto').style.color="#aaddff";
+    reiniciarFormularioDocente(); reiniciarFormEstudiante();
+    cargarListasGuardadas();
+}
+
+function guardarDocente(){
+    let nombre=document.getElementById('dNom').value.trim();
+    let materias=document.getElementById('dMat').value.trim();
+    let correo=document.getElementById('dCor').value.trim();
+    let telefono=document.getElementById('dTel').value.trim();
+    let archivo=document.getElementById('dFoto').files[0];
+
+    if(indiceEditar!==null){
+        let lista=JSON.parse(localStorage.getItem("masDocentes")||"[]");
+        if(archivo){
+            let lec=new FileReader(); 
+            lec.onload=ev=>{
+                lista[indiceEditar]={nombre, materias, correo, telefono, imagen:ev.target.result};
+                localStorage.setItem("masDocentes",JSON.stringify(lista));
+                reiniciarFormularioDocente(); cargarListasGuardadas();
+            };lec.readAsDataURL(archivo);
+        }else{
+            lista[indiceEditar].nombre=nombre; lista[indiceEditar].materias=materias;
+            lista[indiceEditar].correo=correo; lista[indiceEditar].telefono=telefono;
+            localStorage.setItem("masDocentes",JSON.stringify(lista));
+            reiniciarFormularioDocente(); cargarListasGuardadas();
+        }
+        return;
+    }
+
+    if(!archivo)return alert("Selecciona una fotografía");
+    let lec=new FileReader(); lec.onload=ev=>{
+        let lista=JSON.parse(localStorage.getItem("masDocentes")||"[]");
+        lista.push({nombre, materias, correo, telefono, imagen:ev.target.result});
+        localStorage.setItem("masDocentes",JSON.stringify(lista)); reiniciarFormularioDocente(); cargarListasGuardadas();
+    };lec.readAsDataURL(archivo);
+}
+function prepararEditarDocente(i){
+    let lista=JSON.parse(localStorage.getItem("masDocentes")||"[]");
+    let d=lista[i]; indiceEditar=i;
+    document.getElementById('dNom').value=d.nombre;
+    document.getElementById('dMat').value=d.materias;
+    document.getElementById('dCor').value=d.correo;
+    document.getElementById('dTel').value=d.telefono;
+    document.querySelector('button[onclick="guardarDocente()"]').textContent="💾 ACTUALIZAR Docente";
+    window.scrollTo(0,document.querySelector('.form-agregar').offsetTop);
+}
+function reiniciarFormularioDocente(){
+    indiceEditar=null;
+    document.getElementById('dNom').value="";document.getElementById('dMat').value="";
+    document.getElementById('dCor').value="";document.getElementById('dTel').value="";
+    document.querySelector('button[onclick="guardarDocente()"]').textContent="💾 Guardar Docente";
+}
+
+function guardarEstudiante(){
+    let nombre=document.getElementById('estNom').value.trim();
+    let grado=document.getElementById('estGrado').value.trim();
+    let correo=document.getElementById('estCor').value.trim();
+    let archivo=document.getElementById('estFoto').files[0];
+
+    if(indiceEditar!==null){
+        let lista=JSON.parse(localStorage.getItem("listaEstudiantes")||"[]");
+        if(archivo){
+            let lec=new FileReader();lec.onload=ev=>{
+                lista[indiceEditar]={nombre, grado, correo, imagen:ev.target.result};
+                localStorage.setItem("listaEstudiantes",JSON.stringify(lista)); reiniciarFormEstudiante(); cargarListasGuardadas();
+            };lec.readAsDataURL(archivo);
+        }else{
+            lista[indiceEditar].nombre=nombre; lista[indiceEditar].grado=grado; lista[indiceEditar].correo=correo;
+            localStorage.setItem("listaEstudiantes",JSON.stringify(lista)); reiniciarFormEstudiante(); cargarListasGuardadas();
+        }
+        return;
+    }
+
+    let lec=new FileReader(); lec.onload=ev=>{
+        let lista=JSON.parse(localStorage.getItem("listaEstudiantes")||"[]");
+        lista.push({nombre, grado, correo, imagen:ev.target.result||""});
+        localStorage.setItem("listaEstudiantes",JSON.stringify(lista)); reiniciarFormEstudiante(); cargarListasGuardadas();
+    };if(archivo)lec.readAsDataURL(archivo); else lec.onload({target:{result:""}});
+}
+function prepararEditarEstudiante(i){
+    let lista=JSON.parse(localStorage.getItem("listaEstudiantes")||"[]");
+    let est=lista[i]; indiceEditar=i;
+    document.getElementById('estNom').value=est.nombre;document.getElementById('estGrado').value=est.grado;document.getElementById('estCor').value=est.correo;
+    document.querySelector('button[onclick="guardarEstudiante()"]').textContent="💾 ACTUALIZAR Estudiante";
+    window.scrollTo(0,document.querySelector('.form-agregar').offsetTop);
+}
+function reiniciarFormEstudiante(){
+    indiceEditar=null;
+    document.getElementById('estNom').value="";document.getElementById('estGrado').value="";document.getElementById('estCor').value="";
+    document.querySelector('button[onclick="guardarEstudiante()"]').textContent="💾 Guardar Estudiante";
+}
+
+function subirFotosGaleria(){
+    let archivos=document.getElementById('archivosGaleria').files; let gal=JSON.parse(localStorage.getItem("fotosGaleriaIPU")||"[]");
+    for(let i=0;i<archivos.length;i++){let lec=new FileReader();lec.onload=e=>{gal.push(e.target.result);localStorage.setItem("fotosGaleriaIPU",JSON.stringify(gal));cargarListasGuardadas();};lec.readAsDataURL(archivos[i]);}
+}
+
+function cargarListasGuardadas(){
+    let cont=document.getElementById('listaDocentesAgregados');cont.innerHTML="";
+    JSON.parse(localStorage.getItem("masDocentes")||"[]").forEach((d,i)=>{
+        cont.innerHTML+=`<div class="tarjeta-fijo"><div class="foto-circulo"><img src="${d.imagen}"></div><h3 class="nombre-doc">${d.nombre}</h3><p class="descripcion-foto">${d.materias}</p><p class="descripcion-foto">${d.correo}</p><p class="descripcion-foto">${d.telefono}</p>${soyAdmin?`<button class="boton-eliminar" onclick="prepararEditarDocente(${i})">✏️ Modificar</button><button class="boton-eliminar" onclick="quitarDocente(${i})">🗑️ Eliminar</button>`:""}</div>`;
+    });
+
+    cont=document.getElementById('listaEstudiantesAgregados');cont.innerHTML="";
+    JSON.parse(localStorage.getItem("listaEstudiantes")||"[]").forEach((est,i)=>{
+        cont.innerHTML+=`<div class="tarjeta-fijo">${est.imagen?`<div class="foto-circulo"><img src="${est.imagen}"></div>`:""}<h3 class="nombre-doc">${est.nombre}</h3><p class="descripcion-foto">${est.grado}</p><p class="descripcion-foto">${est.correo}</p>${soyAdmin?`<button class="boton-eliminar" onclick="prepararEditarEstudiante(${i})">✏️ Modificar</button><button class="boton-eliminar" onclick="quitarEstudiante(${i})">🗑️ Eliminar</button>`:""}</div>`;
+    });
+
+    cont=document.getElementById('contenedorGaleria');cont.innerHTML="";
+    JSON.parse(localStorage.getItem("fotosGaleriaIPU")||"[]").forEach((img,i)=>{
+        cont.innerHTML+=`<div class="tarjeta-fijo"><div class="foto-circulo"><img src="${img}"></div><p class="descripcion-foto">Imagen agregada</p>${soyAdmin?`<button class="boton-eliminar" onclick="quitarFoto(${i})">🗑️ Eliminar</button>`:""}</div>`;
+    });
+}
+
+function quitarDocente(i){let l=JSON.parse(localStorage.getItem("masDocentes")||"[]");l.splice(i,1);localStorage.setItem("masDocentes",JSON.stringify(l));cargarListasGuardadas();}
+function quitarEstudiante(i){let l=JSON.parse(localStorage.getItem("listaEstudiantes")||"[]");l.splice(i,1);localStorage.setItem("listaEstudiantes",JSON.stringify(l));cargarListasGuardadas();}
+function quitarFoto(i){let l=JSON.parse(localStorage.getItem("fotosGaleriaIPU")||"[]");l.splice(i,1);localStorage.setItem("fotosGaleriaIPU",JSON.stringify(l));cargarListasGuardadas();}
+
+window.onload=cargarListasGuardadas;
+</script>
+
+</body>
+</html>
